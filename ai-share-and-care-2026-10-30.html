@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Share &amp; Care, Oct 30 2026</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1f2328; --muted: #59636e; --border: #d1d9e0;
+    --code-bg: #f6f8fa; --accent: #8250df; --row: #f6f8fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1117; --fg: #e6edf3; --muted: #9198a1; --border: #3d444d;
+      --code-bg: #161b22; --accent: #ab7df8; --row: #161b22;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1117; --fg: #e6edf3; --muted: #9198a1; --border: #3d444d;
+    --code-bg: #161b22; --accent: #ab7df8; --row: #161b22;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 16px 64px; background: var(--bg); color: var(--fg);
+    font: 18px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 2.2em; margin: 0 0 .3em; border-bottom: 1px solid var(--border); padding-bottom: .3em; }
+  h2 { font-size: 1.7em; margin: 0 0 .5em; }
+  html { scroll-snap-type: y mandatory; }
+  section {
+    min-height: 100vh; padding: 40px 0; border-bottom: 1px solid var(--border);
+    scroll-snap-align: start; display: flex; flex-direction: column; justify-content: center;
+  }
+  section:last-of-type { border-bottom: 0; }
+  /* Each slide starts invisible and fades in as it scrolls into view. */
+  @keyframes reveal { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @supports (animation-timeline: view()) {
+    section { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+  }
+  @supports not (animation-timeline: view()) {
+    section { opacity: 0; transform: translateY(24px); transition: opacity .5s ease, transform .5s ease; }
+    section.shown { opacity: 1; transform: none; }
+  }
+  p { margin: .6em 0; }
+  ul { margin: .6em 0; padding-left: 1.3em; }
+  li { margin: .25em 0; }
+  a { color: inherit; word-break: break-all; }
+  code, pre {
+    font: 0.9em/1.45 ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    background: var(--code-bg); border-radius: 6px;
+  }
+  code { padding: .15em .35em; }
+  pre { padding: 14px 16px; overflow-x: auto; margin: .8em 0; }
+  pre code { padding: 0; background: none; }
+  table { border-collapse: collapse; width: 100%; margin: .8em 0; font-size: .95em; }
+  th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--row); }
+  tr:nth-child(even) td { background: var(--row); }
+  .callout {
+    border-left: 4px solid var(--accent); background: var(--code-bg);
+    padding: 12px 16px; margin: 1em 0; border-radius: 0 6px 6px 0;
+  }
+  .callout strong { color: var(--accent); display: block; margin-bottom: .2em; }
+  .muted { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+
+<h1>AI Share &amp; Care, Oct 30 2026</h1>
+<ul>
+  <li>Two weeks of Claude Code on the RB media service</li>
+</ul>
+<div class="callout"><strong>Important</strong>Every correction becomes a rule Claude applies next time: memory, skills, doc formats</div>
+
+<section>
+<h2>1. Auto-memory</h2>
+<ul>
+  <li>Claude keeps a per-project second brain, no setup from me</li>
+  <li>60 files so far</li>
+</ul>
+<table>
+<tr><th>Memory</th><th>Type</th><th>What it remembers</th></tr>
+<tr><td><code>iterm2-toolbelt-not-intellij</code></td><td>user</td><td>Works in iTerm2 tabs; IntelliJ only for diffs and SQL, so skip the IDE MCP</td></tr>
+<tr><td><code>rb-reviewer-names</code></td><td>reference</td><td>jsheets_rba is Jeff</td></tr>
+<tr><td><code>pup-datadog-cli</code></td><td>reference</td><td><code>--from="2h"</code> not <code>now-2h</code>; aggregate misses fresh spans, use search</td></tr>
+<tr><td><code>heredoc-breaks-and-chains</code></td><td>feedback</td><td>A heredoc in an <code>&amp;&amp;</code> chain shipped a stale commit message: message file first, commit last</td></tr>
+<tr><td><code>docs-as-slides</code></td><td>feedback</td><td>One H2 per slide, table, verdict: "Less words says more"</td></tr>
+<tr><td><code>localstack-license-gotcha</code></td><td>project</td><td>Never pull a 2026.x tag; S3Mock for S3 emulation</td></tr>
+<tr><td><code>rendition-endpoints-state</code></td><td>project</td><td>First half merged, second half waits on the catalog</td></tr>
+</table>
+<ul>
+  <li>Every <b>feedback</b> memory carries a <b>why</b> and a <b>how to apply</b></li>
+  <li>Index loads each session, bodies recalled when relevant</li>
+  <li>Once in a while I say "remember that", the rest it saves on its own</li>
+</ul>
+</section>
+
+<section>
+<h2>2. Saving tokens</h2>
+<ul>
+  <li>Gradle printed 1400 lines into context per run</li>
+  <li>I asked Claude Code how to use fewer tokens on Gradle</li>
+  <li>Claude wrote a script that runs Gradle and prints only what matters: about 20 tokens instead of about 20,000</li>
+</ul>
+<pre><code>OK: spotlessCheck detekt test passed in 41s (full log: build/check.log)</code></pre>
+<table>
+<tr><th>Change</th><th>Effect</th></tr>
+<tr><td><code>scripts/check.sh</code>, written by Claude</td><td>Digest on screen, full log on disk</td></tr>
+<tr><td><code>testLogging { events("failed") }</code></td><td>Less noise at the source</td></tr>
+</table>
+<ul>
+  <li>Next: a CircleCI failure fetcher that prints only the failing step, a <code>kubectl</code> pod digest for dev deploys, a Snyk summary by severity, a PostToolUse hook that runs <code>spotlessApply</code> after every edit</li>
+</ul>
+</section>
+
+<section>
+<h2>3. MCPs and CLIs</h2>
+<ul>
+  <li>Five MCPs connected</li>
+  <li>The flaky ones have a CLI behind them</li>
+</ul>
+<table>
+<tr><th>MCP</th><th>For</th><th>When it fails</th></tr>
+<tr><td>Unblocked</td><td>Why the code is the way it is: PRs, Slack, Confluence, Jira in one query</td><td></td></tr>
+<tr><td>Honeycomb</td><td>Traces, BubbleUp, triggers</td><td></td></tr>
+<tr><td>Granola</td><td>Meeting notes and transcripts</td><td></td></tr>
+<tr><td>Atlassian Rovo</td><td>Jira and Confluence</td><td>Times out for minutes: <code>acli</code></td></tr>
+<tr><td>CircleCI</td><td>Pipeline status, failure logs</td><td>Pagination bug: v1.1 REST, <code>gh pr checks</code></td></tr>
+</table>
+<table>
+<tr><th>CLI</th><th>For</th></tr>
+<tr><td><code>pup</code></td><td>Datadog: traces, monitors, dashboards</td></tr>
+<tr><td><code>acli</code></td><td>Jira comments, edits, creates from a file</td></tr>
+<tr><td><code>gh</code></td><td>PRs, checks, reviews</td></tr>
+<tr><td><code>rbctl</code>, <code>kubectl</code>, <code>helm</code></td><td>Cluster login, port-forwards, personal dev deploys</td></tr>
+<tr><td><code>ast-grep</code>, <code>rg</code></td><td>Symbol and text search without the IDE</td></tr>
+</table>
+</section>
+
+<section>
+<h2>4. The terminal is the IDE</h2>
+<ul>
+  <li>iTerm2 plus the Claude Code Toolbelt</li>
+  <li>A hook fires on every Claude event and paints the tab</li>
+</ul>
+<table>
+<tr><th>What I see</th><th>Why it matters</th></tr>
+<tr><td>Tab title = session name + <b>working</b> / <b>idle</b></td><td>Which tab is waiting on me, without clicking through</td></tr>
+<tr><td>Session Status panel, every session listed</td><td>Three agents in flight, one glance</td></tr>
+<tr><td>Chat / Diff / Code Review tabs, <code>+7/-2 files +859/-53</code></td><td>Review the diff where it was written</td></tr>
+</table>
+<ul>
+  <li>IntelliJ: occasional code comparisons and running SQL</li>
+</ul>
+</section>
+
+<section>
+<h2>5. Status line</h2>
+<ul>
+  <li>I asked Claude to add directory, model, effort, and git branch to the status line, and it did</li>
+  <li><code>~/.claude/statusline.sh</code>, wired into <code>settings.json</code></li>
+</ul>
+<pre><code>~/projects/devo/rb/media-service · feature/renditions ✱3 ↑1 · Opus 5.5 · high</code></pre>
+<table>
+<tr><th>Segment</th><th>Why it matters</th></tr>
+<tr><td>Directory</td><td>Which repo this tab is in, with three sessions open</td></tr>
+<tr><td>Branch, <code>✱</code> dirty, <code>↑</code> ahead, <code>↓</code> behind</td><td>Uncommitted or unpushed work before I close the tab</td></tr>
+<tr><td>Model</td><td>Opus or Sonnet, no <code>/model</code> to check</td></tr>
+<tr><td>Effort</td><td>Low on a rename, high on a design: see it before the long think</td></tr>
+</table>
+<ul>
+  <li>Claude Code pipes session JSON to the script, 25 lines of bash and <code>jq</code> print the line</li>
+</ul>
+</section>
+
+
+<section>
+<h2>6. Skills</h2>
+<ul>
+  <li>Five files in <code>~/.claude/skills</code>: commit-message, pr-description, branch-name, peer-review, personal-preferences</li>
+</ul>
+<pre><code>## Attribution
+Commit as the user only. Do NOT add a `Co-Authored-By: Claude ...` trailer,
+no matter what the default Claude Code commit guidance says.</code></pre>
+<ul>
+  <li>Claude picks them up on its own nearly every time</li>
+  <li>A reminder when it slips becomes a memory</li>
+</ul>
+</section>
+
+<section>
+<h2>7. Side projects</h2>
+<ul>
+  <li><a href="https://huskerfinder.sheetsj.com/?sport=football" target="_blank" rel="noopener">https://huskerfinder.sheetsj.com/?sport=football</a></li>
+  <li><a href="https://vikingsfinder.sheetsj.com" target="_blank" rel="noopener">https://vikingsfinder.sheetsj.com</a></li>
+</ul>
+</section>
+
+<section>
+<h2>Summary</h2>
+<table>
+<tr><td>Auto-memory</td></tr>
+<tr><td>Saving tokens</td></tr>
+<tr><td>MCPs and CLIs</td></tr>
+<tr><td>The terminal is the IDE</td></tr>
+<tr><td>Status line</td></tr>
+<tr><td>Skills</td></tr>
+<tr><td>Side projects</td></tr>
+</table>
+</section>
+
+</main>
+<script>
+  // Fallback for browsers without CSS scroll-driven animations.
+  if (!CSS.supports('animation-timeline: view()')) {
+    const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && e.target.classList.add('shown')), { threshold: 0.3 });
+    document.querySelectorAll('section').forEach(s => io.observe(s));
+  }
+</script>
+</body>
+</html>
